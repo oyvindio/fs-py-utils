@@ -23,7 +23,7 @@ def findAllDirs(directory):
     """
     # this effectively calls os.listdir on each directory under directory,
     # which may affect measurements... (caching etc.)
-    return [root for root, dirs, files in os.walk(directory)]
+    directories = [root for root, dirs, files in os.walk(directory)]
 
 def shelveDirs(directories, filename=SHELVE_FILE):
     """
@@ -49,17 +49,21 @@ def readShelvedDirs(filename=SHELVE_FILE):
         s.close()
         return directories
 
-if __name__ == "__main__":
+def genSample():
+    """
+    a generator that yields a tuple of
+    (random_path, runtime for os.listdir(random_path))
+    """
     directories = readShelvedDirs()
-    statement = """\
-os.listdir(d)
-"""
-    setup="""\
-import os
-import random
-d = random.choice({0})
-print d
-""".format(directories)
-    runtime  = timeit.timeit(statement, setup, number=1)
-    print runtime
+    statement = "os.listdir(d)"
+    while True:
+        directory = random.choice(directories)
+        setup = "import os; d = %r" % directory
+        runtime  = timeit.timeit(statement, setup, number=1)
+        yield (directory, runtime)
+
+
+if __name__ == "__main__":
+    g = genSample()
+    samples = [g.next() for i in range(10000)]
 
