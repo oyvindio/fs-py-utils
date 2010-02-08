@@ -21,9 +21,21 @@ def findAllDirs(directory):
     Arguments:
     - `directory`: the directory from which we start the os.walk call
     """
-    # this effectively calls os.listdir on each directory under directory,
+    # ignore these dirs under /
+    ignorelist = ["proc", "sys", "dev"]
+    directories = list()
+    # this effectively calls os.listdir on each subdirectory under directory,
     # which may affect measurements... (caching etc.)
-    directories = [root for root, dirs, files in os.walk(directory)]
+    for root, dirs, files in os.walk(directory):
+        if root == "/":
+            print dirs
+            for d in ignorelist:
+                if d in dirs:
+                    dirs.remove(d)
+            print dirs
+        directories.append(root)
+    return directories
+    ## return [root for root, dirs, files in os.walk(directory)]
 
 def shelveDirs(directories, filename=SHELVE_FILE):
     """
