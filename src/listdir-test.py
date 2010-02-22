@@ -22,17 +22,15 @@ def findAllDirs(directory):
     - `directory`: the directory from which we start the os.walk call
     """
     # ignore these dirs under /
-    ignorelist = ["proc", "sys", "dev"]
+    ignorelist = ["proc", "sys", "dev", "tmp"]
     directories = list()
     # this effectively calls os.listdir on each subdirectory under directory,
     # which may affect measurements... (caching etc.)
     for root, dirs, files in os.walk(directory):
         if root == "/":
-            print dirs
             for d in ignorelist:
                 if d in dirs:
                     dirs.remove(d)
-            print dirs
         directories.append(root)
     return directories
     ## return [root for root, dirs, files in os.walk(directory)]
@@ -74,8 +72,24 @@ def genSample():
         runtime  = timeit.timeit(statement, setup, number=1)
         yield (directory, runtime)
 
+def plot(dirsizes, runtimes):
+    """
+    create a scatter plot
+    Arguments:
+    - `dirsizes`:
+    - `runtimes`:
+    """
+    plt.subplot(111)
+    plt.axes([0, max(dirsizes), 0, max(runtimes)])
+    plt.grid(True)
+    plt.scatter(dirsizes, runtimes)
+    plt.savefig("/tmp/test.svg")
+
 
 if __name__ == "__main__":
     g = genSample()
     samples = [g.next() for i in range(10000)]
 
+    runtimes = [d[1] for d in samples]
+    dirsizes = [len(os.listdir(d[0])) for d in samples]
+    plot(dirsizes, runtimes)
