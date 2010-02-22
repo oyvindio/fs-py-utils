@@ -7,7 +7,7 @@ import random
 import shelve
 import numpy as np
 import matplotlib as mpl
-mpl.use("svg") # plot graphs as scalable vector graphics
+#mpl.use("svg") # plot graphs as scalable vector graphics
 import matplotlib.pyplot as plt
 
 
@@ -69,7 +69,9 @@ def genSample():
     while True:
         directory = random.choice(directories)
         setup = "import os; d = %r" % directory
-        runtime  = timeit.timeit(statement, setup, number=1)
+        t = timeit.Timer(statement, setup)
+        runtime = t.timeit(1)
+        #runtime  = timeit.timeit(statement, setup, number=1)
         yield (directory, runtime)
 
 def plot(dirsizes, runtimes):
@@ -88,7 +90,7 @@ def plot(dirsizes, runtimes):
 
 if __name__ == "__main__":
     g = genSample()
-    samples = [g.next() for i in range(10000)]
+    samples = [g.next() for i in range(100)]
 
     runtimes = [d[1] for d in samples]
     dirsizes = [len(os.listdir(d[0])) for d in samples]
