@@ -7,8 +7,9 @@ import random
 import shelve
 import numpy as np
 import matplotlib as mpl
-#mpl.use("svg") # plot graphs as scalable vector graphics
+mpl.use("svg") # plot graphs as scalable vector graphics
 import matplotlib.pyplot as plt
+from time import strftime
 
 
 ROOT_DIR = "/"
@@ -71,21 +72,25 @@ def genSample():
         setup = "import os; d = %r" % directory
         t = timeit.Timer(statement, setup)
         runtime = t.timeit(1)
-        #runtime  = timeit.timeit(statement, setup, number=1)
         yield (directory, runtime)
 
-def plot(dirsizes, runtimes):
+def scatterPlot(dirsizes, runtimes, filename):
     """
     create a scatter plot
     Arguments:
     - `dirsizes`:
     - `runtimes`:
+    - `filename`: filename excluding extension (.svg)
     """
-    plt.subplot(111)
-    plt.axes([0, max(dirsizes), 0, max(runtimes)])
+    ax = plt.figure().add_subplot(111)
+    ax.scatter(dirsizes, runtimes)
+    ax.axis([0, max(dirsizes), 0, max(runtimes)])
+    plt.title("os.listdir run times")
+    plt.xlabel("Directory size (file count)")
+    plt.ylabel("Run time (seconds)")
     plt.grid(True)
-    plt.scatter(dirsizes, runtimes)
-    plt.savefig("/tmp/test.svg")
+
+    plt.savefig("{0}.svg".format(filename))
 
 
 if __name__ == "__main__":
@@ -94,4 +99,4 @@ if __name__ == "__main__":
 
     runtimes = [d[1] for d in samples]
     dirsizes = [len(os.listdir(d[0])) for d in samples]
-    plot(dirsizes, runtimes)
+    scatterPlot(dirsizes, runtimes, strftime("%Y-%m-%d-%H%M%S"))
