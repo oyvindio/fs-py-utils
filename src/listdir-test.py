@@ -95,11 +95,10 @@ def scatterPlot(dirsizes, runtimes, filename):
 
 
 if __name__ == "__main__":
-    print sys.argv
-    if len(sys.argv) == 1:
-        numSamples = 10000
-    else:
+    if len(sys.argv) == 2:
         numSamples = int(sys.argv[1])
+    else:
+        numSamples = 10000
 
     g = genSample()
     samples = [g.next() for i in range(numSamples)]
