@@ -93,6 +93,21 @@ def scatterPlot(dirsizes, runtimes, filename):
 
     plt.savefig("{0}.svg".format(filename))
 
+def shelveResults(paths, runtimes, filename):
+    """
+    write the results from the analysis to a shelve, for future
+    reference
+
+    Arguments:
+    - `paths`:
+    - `runtimes`:
+    - `filename`: filename excluding extension (.shelve)
+    """
+    s = shelve.open("{0}.shelve".format(filename))
+    s["paths"] = paths
+    s["runtimes"] = runtimes
+    s.close()
+
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
@@ -103,6 +118,12 @@ if __name__ == "__main__":
     g = genSample()
     samples = [g.next() for i in range(numSamples)]
 
+    paths = [d[0] for d in samples]
     runtimes = [d[1] for d in samples]
-    dirsizes = [len(os.listdir(d[0])) for d in samples]
-    scatterPlot(dirsizes, runtimes, strftime("%Y-%m-%d-%H%M%S"))
+    dirsizes = [len(os.listdir(p)) for p in paths]
+
+    resultTime = strftime("%Y-%m-%d-%H%M%S")
+    scatterPlot(dirsizes, runtimes, resultTime)
+    shelveResults(paths, runtimes, resultTime)
+
+
