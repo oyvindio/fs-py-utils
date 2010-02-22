@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import timeit
 import random
 import shelve
@@ -94,8 +95,14 @@ def scatterPlot(dirsizes, runtimes, filename):
 
 
 if __name__ == "__main__":
+    print sys.argv
+    if len(sys.argv) == 1:
+        numSamples = 10000
+    else:
+        numSamples = int(sys.argv[1])
+
     g = genSample()
-    samples = [g.next() for i in range(100)]
+    samples = [g.next() for i in range(numSamples)]
 
     runtimes = [d[1] for d in samples]
     dirsizes = [len(os.listdir(d[0])) for d in samples]
