@@ -61,12 +61,12 @@ def readShelvedDirs(filename=SHELVE_FILE):
         s.close()
         return directories
 
-def genSample():
+def genSample(root=ROOT_DIR):
     """
     a generator that yields a tuple of
     (random_path, runtime for os.listdir(random_path))
     """
-    p = pathfinder.PathFinder(ROOT_DIR)
+    p = pathfinder.PathFinder(root)
     statement = "os.listdir(d)"
     while True:
         directory = p.randomPath()
@@ -110,12 +110,17 @@ def shelveResults(paths, runtimes, filename):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        numSamples = int(sys.argv[1])
-    else:
-        numSamples = 10000
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-r", "--root-directory", dest="root",
+                      help="root directory for path list")
+    parser.add_option("-s", "--samples", dest="samples",
+                      help="number of samples to use when measuring")
+    options, args = parser.parse_args()
+    root = options.root if options.root else ROOT_DIR
+    numSamples = int(options.samples) if options.samples else 10000
 
-    g = genSample()
+    g = genSample(root)
     samples = [g.next() for i in range(numSamples)]
 
     paths = [d[0] for d in samples]
