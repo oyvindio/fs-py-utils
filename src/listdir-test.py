@@ -6,7 +6,6 @@ import sys
 import timeit
 import random
 import shelve
-import numpy as np
 import matplotlib as mpl
 mpl.use("svg") # plot graphs as scalable vector graphics
 import matplotlib.pyplot as plt
