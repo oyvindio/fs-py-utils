@@ -4,5 +4,5 @@
 *~
 *.swp
 .ropeproject
-dirs.db
+paths.db
 *.svg
