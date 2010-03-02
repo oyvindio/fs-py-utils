@@ -10,9 +10,10 @@ import matplotlib as mpl
 mpl.use("svg") # plot graphs as scalable vector graphics
 import matplotlib.pyplot as plt
 from time import strftime
+import pathfinder
 
 
-ROOT_DIR = "/"
+ROOT_DIR = "/usr/lib"
 SHELVE_FILE = "dirs.db"
 
 def findAllDirs(directory):
@@ -65,10 +66,10 @@ def genSample():
     a generator that yields a tuple of
     (random_path, runtime for os.listdir(random_path))
     """
-    directories = readShelvedDirs()
+    p = pathfinder.PathFinder(ROOT_DIR)
     statement = "os.listdir(d)"
     while True:
-        directory = random.choice(directories)
+        directory = p.randomPath()
         setup = "import os; d = %r" % directory
         t = timeit.Timer(statement, setup)
         runtime = t.timeit(1)
