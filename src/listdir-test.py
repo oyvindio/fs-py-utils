@@ -8,54 +8,7 @@ import matplotlib.pyplot as plt
 from time import strftime
 import pathfinder
 
-
-ROOT_DIR = "/usr/lib"
-SHELVE_FILE = "dirs.db"
-
-def findAllDirs(directory):
-    """
-    Returns a list of all subdirectories under directory
-
-    Arguments:
-    - `directory`: the directory from which we start the os.walk call
-    """
-    # ignore these dirs under /
-    ignorelist = ["proc", "sys", "dev", "tmp"]
-    directories = list()
-    # this effectively calls os.listdir on each subdirectory under directory,
-    # which may affect measurements... (caching etc.)
-    for root, dirs, files in os.walk(directory):
-        if root == "/":
-            for d in ignorelist:
-                if d in dirs:
-                    dirs.remove(d)
-        directories.append(root)
-    return directories
-    ## return [root for root, dirs, files in os.walk(directory)]
-
-def shelveDirs(directories, filename=SHELVE_FILE):
-    """
-    Writes a list of all paths on the system to a shelve at `filename`.
-    """
-    s = shelve.open(filename)
-    s["dirs"] = directories
-    s.close()
-
-def readShelvedDirs(filename=SHELVE_FILE):
-    """
-    Tries to read a list of paths from the shelve at `filename`. If no
-    list is found, scans the file system, creates a new shelve and
-    returns a new list of directories.
-    """
-    s = shelve.open(filename)
-    if not s.has_key("dirs"):
-        directories = findAllDirs(ROOT_DIR)
-        shelveDirs(directories)
-        return directories
-    else:
-        directories = s["dirs"]
-        s.close()
-        return directories
+ROOT_DIR = "/"
 
 def genSample(root=ROOT_DIR):
     """
