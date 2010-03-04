@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import sys
-import timeit
-import random
-import shelve
+from optparse import OptionParser
 import matplotlib as mpl
 mpl.use("svg") # plot graphs as scalable vector graphics
 import matplotlib.pyplot as plt
@@ -110,7 +106,6 @@ def shelveResults(paths, runtimes, filename):
 
 
 if __name__ == "__main__":
-    from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-r", "--root-directory", dest="root",
                       help="root directory for path list")
