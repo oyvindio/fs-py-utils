@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from optparse import OptionParser
+import timeit
+import os
+import shelve
 import matplotlib as mpl
 mpl.use("svg") # plot graphs as scalable vector graphics
 import matplotlib.pyplot as plt
