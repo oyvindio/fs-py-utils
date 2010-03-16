@@ -24,8 +24,15 @@ def genSample(root=ROOT_DIR):
         directory = p.randomPath()
         setup = "import os; d = %r" % directory
         t = timeit.Timer(statement, setup)
-        runtime = t.timeit(1)
-        yield (directory, runtime)
+        try:
+            runtime = t.timeit(1)
+            yield (directory, runtime)
+        except OSError:
+            # This means we can't open directory for whatever reason; typically
+            # a permissions issue, or the directory merely does not exist.
+            # When this happens, we merely skip the directory, and try another
+            # one automagically
+            pass
 
 def scatterPlot(dirsizes, runtimes, filename):
     """
