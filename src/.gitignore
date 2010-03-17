@@ -6,4 +6,4 @@
 .ropeproject
 paths.db
 *.svg
-*.shelve
+*.shelf

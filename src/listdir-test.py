@@ -54,15 +54,15 @@ def scatterPlot(dirsizes, runtimes, filename):
 
 def shelveResults(paths, runtimes, filename):
     """
-    write the results from the analysis to a shelve, for future
+    write the results from the analysis to a shelf, for future
     reference
 
     Arguments:
     - `paths`:
     - `runtimes`:
-    - `filename`: filename excluding extension (.shelve)
+    - `filename`: filename excluding extension (.shelf)
     """
-    s = shelve.open("{0}.shelve".format(filename))
+    s = shelve.open("{0}.shelf".format(filename))
     s["paths"] = paths
     s["runtimes"] = runtimes
     s.close()
