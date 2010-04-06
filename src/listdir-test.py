@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -50,7 +51,7 @@ def scatterPlot(dirsizes, runtimes, filename):
     plt.ylabel("Run time (seconds)")
     plt.grid(True)
 
-    plt.savefig("{0}.svg".format(filename))
+    plt.savefig("%s.svg" % filename)
 
 def shelveResults(paths, runtimes, filename):
     """
@@ -62,7 +63,7 @@ def shelveResults(paths, runtimes, filename):
     - `runtimes`:
     - `filename`: filename excluding extension (.shelf)
     """
-    s = shelve.open("{0}.shelf".format(filename))
+    s = shelve.open("%s.shelf" % filename)
     s["paths"] = paths
     s["runtimes"] = runtimes
     s.close()
