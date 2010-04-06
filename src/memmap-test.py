@@ -1,22 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 import os
+import timeit
 import random
 import pathfinder
 
-ROOT_DIR="/tmp/memmaps"
+ROOT_DIR="/home/oyvindio/tmp/memmaps"
 
 def genSample(root=ROOT_DIR):
     """
     """
     p = pathfinder.PathFinder(root)
-    files = filter(os.path.isfile, p.allPaths())
-    statement = "np.memmap(f, dtype=ext)"
+    files = p.allPaths(os.path.isfile)
+    print files
+    statement = "np.memmap(f, dtype=d)"
     while True:
         filename = random.choice(files)
-        setup = "import os; import numpy as np; f = %s, ext = %s" % filename, dtypeFromExt(filename)
+        setup = "import os; import numpy as np; f = %r, d = %r" % (filename, dtypeFromExt(filename))
         t = timeit.Timer(statement, setup)
         try:
             runtime = t.timeit(1)
