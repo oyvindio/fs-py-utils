@@ -25,7 +25,14 @@ class PathFinder(object):
         """
         Returns a list of all paths under `self._root`
         """
-        return [root for root, dirs, files in os.walk(self._root)]
+        paths = []
+        for root, dirs, files in os.walk(self._root):
+            print root
+            paths.append(root)
+            for filename in files:
+                print os.path.join(root, filename)
+                paths.append(os.path.join(root, filename))
+        return paths
 
     def _shelvePaths(self):
         """
@@ -50,20 +57,22 @@ class PathFinder(object):
             else:
                 self._paths = cache[self.CACHE_KEY]
 
-    def allPaths(self):
+    def allPaths(self, filterFunc=None):
         """
-        Returns a list of all paths
-        """
-        if self._paths is None:
-            self._initPaths
-        return self._paths
-
-
-    def randomPath(self):
-        """
-        Returns a random path
+        Returns a list of all paths, optionally filtered by passing `filterFunc`
+        and the list of paths through `filter()`.
         """
         if self._paths is None:
             self._initPaths()
-        return random.choice(self._paths)
+        return filter(filterFunc, self._paths)
 
+    def randomPath(self, filterFunc=None):
+        """
+        Returns a random path, optionally filtering the list paths from which
+        we do the random selection, by passing the list and `filterFunc`
+        through `filter()`.
+        """
+        if self._paths is None:
+            self._initPaths()
+        paths = filter(filterFunc, self._paths)
+        return random.choice(paths)

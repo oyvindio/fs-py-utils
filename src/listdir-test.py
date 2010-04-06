@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -22,7 +21,7 @@ def genSample(root=ROOT_DIR):
     p = pathfinder.PathFinder(root)
     statement = "os.listdir(d)"
     while True:
-        directory = p.randomPath()
+        directory = p.randomPath(os.path.isdir)
         setup = "import os; d = %r" % directory
         t = timeit.Timer(statement, setup)
         try:
