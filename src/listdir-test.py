@@ -72,7 +72,9 @@ if __name__ == "__main__":
 
     paths = [d[0] for d in samples]
     runtimes = [d[1] for d in samples]
-    dirsizes = [len(os.listdir(p)) for p in paths] 
+    dirsizes = [len(os.listdir(p)) for p in paths]
+    pathdepths = map(l.pathLength, paths)
 
     l.scatterPlot(dirsizes, runtimes)
-    l.shelveResults({"paths": paths, "runtimes": runtimes})
+    l.shelveResults({"paths": paths, "runtimes": runtimes,
+                     "dirsizes": dirsizes, "pathdepths": pathdepths})
