@@ -34,13 +34,12 @@ def genSample(root=ROOT_DIR):
             # one automagically
             pass
 
-def scatterPlot(dirsizes, runtimes, filename):
+def scatterPlot(dirsizes, runtimes):
     """
     create a scatter plot
     Arguments:
     - `dirsizes`:
     - `runtimes`:
-    - `filename`: filename excluding extension (.svg)
     """
     ax = plt.figure().add_subplot(111)
     ax.scatter(dirsizes, runtimes)
@@ -50,23 +49,20 @@ def scatterPlot(dirsizes, runtimes, filename):
     plt.ylabel("Run time (seconds)")
     plt.grid(True)
 
-    plt.savefig("%s.svg" % filename)
+    plt.savefig("listdir-%s.svg" % strftime("%Y-%m-%d-%H%M%S"))
 
-def shelveResults(paths, runtimes, filename):
+def shelveResults(results):
     """
     write the results from the analysis to a shelf, for future
     reference
 
     Arguments:
-    - `paths`:
-    - `runtimes`:
-    - `filename`: filename excluding extension (.shelf)
+    - `results`: a dict containing the results we want to shelve
     """
-    s = shelve.open("%s.shelf" % filename)
-    s["paths"] = paths
-    s["runtimes"] = runtimes
+    s = shelve.open("listdir-%s.shelf" % strftime("%Y-%m-%d-%H%M%S"))
+    for k, v in results.iteritems():
+        s[k] = v
     s.close()
-
 
 if __name__ == "__main__":
     parser = OptionParser()
@@ -83,10 +79,7 @@ if __name__ == "__main__":
 
     paths = [d[0] for d in samples]
     runtimes = [d[1] for d in samples]
-    dirsizes = [len(os.listdir(p)) for p in paths]
+    dirsizes = [len(os.listdir(p)) for p in paths] 
 
-    resultTime = strftime("%Y-%m-%d-%H%M%S")
-    scatterPlot(dirsizes, runtimes, resultTime)
-    shelveResults(paths, runtimes, resultTime)
-
-
+    scatterPlot(dirsizes, runtimes)
+    shelveResults({"paths": paths, "runtimes": runtimes})
