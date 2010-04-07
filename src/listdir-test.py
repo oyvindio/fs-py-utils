@@ -37,6 +37,13 @@ class ListdirTest(abstracttest.AbstractTest):
                 # automagically
                 pass
 
+    def pathLength(self, path, length=0):
+        if path == "/":
+            return length
+        length += 1
+        head, tail = os.path.split(path)
+        return self.pathLength(head, length)
+
     def scatterPlot(self, dirsizes, runtimes):
         """
         create a scatter plot
