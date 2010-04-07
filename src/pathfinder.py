@@ -27,10 +27,8 @@ class PathFinder(object):
         """
         paths = []
         for root, dirs, files in os.walk(self._root):
-            print root
             paths.append(root)
             for filename in files:
-                print os.path.join(root, filename)
                 paths.append(os.path.join(root, filename))
         return paths
 
