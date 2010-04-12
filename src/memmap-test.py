@@ -19,10 +19,9 @@ class MemmapTest(abstracttest.AbstractTest):
         (random_file, runtime for np.memmap(random_file))
         """
         p = pathfinder.PathFinder(root)
-        files = p.allPaths(os.path.isfile)
         statement = "np.memmap(f, dtype=d)"
         while True:
-            filename = random.choice(files)
+            filename = p.randomFile()
             setup = "import os; import numpy as np; f = %r; d = %r" \
                     % (filename, self.dtypeFromExt(filename))
             t = timeit.Timer(statement, setup)

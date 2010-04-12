@@ -3,9 +3,9 @@
 
 import timeit
 import os
-import matplotlib as mpl
-mpl.use("svg") # plot graphs as scalable vector graphics
-import matplotlib.pyplot as plt
+#import matplotlib as mpl
+#mpl.use("svg") # plot graphs as scalable vector graphics
+#import matplotlib.pyplot as plt
 from time import strftime
 import abstracttest
 import pathfinder
@@ -23,7 +23,8 @@ class ListdirTest(abstracttest.AbstractTest):
         p = pathfinder.PathFinder(root)
         statement = "os.listdir(d)"
         while True:
-            directory = p.randomPath(os.path.isdir)
+            #directory = p.randomPath(os.path.isdir)
+            directory = p.randomDir()
             setup = "import os; d = %r" % directory
             t = timeit.Timer(statement, setup)
             try:
@@ -38,27 +39,27 @@ class ListdirTest(abstracttest.AbstractTest):
                 pass
 
     def pathLength(self, path, length=0):
-        if path == "/":
+        if len(path) <= 0:
             return length
         length += 1
         head, tail = os.path.split(path)
         return self.pathLength(head, length)
 
-    def scatterPlot(self, dirsizes, runtimes):
-        """
-        create a scatter plot
-        Arguments:
-        - `dirsizes`:
-        - `runtimes`:
-        """
-        ax = plt.figure().add_subplot(111)
-        ax.scatter(dirsizes, runtimes)
-        ax.axis([0, max(dirsizes), 0, max(runtimes)])
-        plt.title("os.listdir run times")
-        plt.xlabel("Directory size (file count)")
-        plt.ylabel("Run time (seconds)")
-        plt.grid(True)
-        plt.savefig("listdir-%s.svg" % strftime("%Y-%m-%d-%H%M"))
+    ## def scatterPlot(self, dirsizes, runtimes):
+    ##     """
+    ##     create a scatter plot
+    ##     Arguments:
+    ##     - `dirsizes`:
+    ##     - `runtimes`:
+    ##     """
+    ##     ax = plt.figure().add_subplot(111)
+    ##     ax.scatter(dirsizes, runtimes)
+    ##     ax.axis([0, max(dirsizes), 0, max(runtimes)])
+    ##     plt.title("os.listdir run times")
+    ##     plt.xlabel("Directory size (file count)")
+    ##     plt.ylabel("Run time (seconds)")
+    ##     plt.grid(True)
+    ##     plt.savefig("listdir-%s.svg" % strftime("%Y-%m-%d-%H%M"))
 
     def getSamples(self):
         return super(ListdirTest, self).getSamples()
@@ -75,6 +76,6 @@ if __name__ == "__main__":
     dirsizes = [len(os.listdir(p)) for p in paths]
     pathdepths = map(l.pathLength, paths)
 
-    l.scatterPlot(dirsizes, runtimes)
+    ## l.scatterPlot(dirsizes, runtimes)
     l.shelveResults({"paths": paths, "runtimes": runtimes,
                      "dirsizes": dirsizes, "pathdepths": pathdepths})
