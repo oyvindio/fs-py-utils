@@ -39,7 +39,7 @@ class ListdirTest(abstracttest.AbstractTest):
                 pass
 
     def pathLength(self, path, length=0):
-        if len(path) <= 0:
+        if len(path) <= 1:
             return length
         length += 1
         head, tail = os.path.split(path)
