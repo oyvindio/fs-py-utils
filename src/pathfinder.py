@@ -78,7 +78,7 @@ class PathFinder(object):
                 self._dirs = self.allPaths(filterFunc=os.path.isdir)
                 self._shelvePaths()
             else:
-                self._paths = cache[self.CACHE_KEY_DIRS]
+                self._dirs = cache[self.CACHE_KEY_DIRS]
 
     def _initFiles(self):
         """
@@ -90,10 +90,10 @@ class PathFinder(object):
         from contextlib import closing
         with closing(shelve.open(self._cache)) as cache:
             if not cache.has_key(self.CACHE_KEY_FILES):
-                self._dirs = self.allPaths(filterFunc=os.path.isfile)
+                self._files = self.allPaths(filterFunc=os.path.isfile)
                 self._shelvePaths()
             else:
-                self._paths = cache[self.CACHE_KEY_FILES]
+                self._files = cache[self.CACHE_KEY_FILES]
 
     def allPaths(self, filterFunc=None):
         """
